@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  dynamic-firewall:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: dynamic-firewall-ai
+    ports:
+      - "5000:5000"  # Dashboard
+      - "8081:8081"  # Honeypot
+    volumes:
+      - ../data:/app/data
+      - ../models:/app/models
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=production
+    restart: unless-stopped
+    networks:
+      - firewall-network
+
+networks:
+  firewall-network:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
+  models:
+    driver: local
+    
